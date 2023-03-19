@@ -49,7 +49,7 @@ public class Principal extends JDialog implements ActionListener {
 				panelContenido.add(lblPrompt);
 			}
 			{
-				cmbOpciones = new JComboBox(opciones);
+				cmbOpciones = new JComboBox<>(opciones);
 				cmbOpciones.setMaximumRowCount(10);
 				cmbOpciones.addActionListener(this);
 				cmbOpciones.setActionCommand("Cambio");
@@ -88,7 +88,7 @@ public class Principal extends JDialog implements ActionListener {
 			// Con el primer aceptar,configuramos el dialogo principal con las unidades de
 			// conversión seleccionadas.
 			if (tipoOperacion == Config.Operaciones.CONFIG_CONVERSOR) {
-				configurarConversor(cmbOpciones.getSelectedIndex());
+				configurarTipoConversor(cmbOpciones.getSelectedIndex());
 			} else {
 				// Con el segundo hacemos la conversión.
 				this.setVisible(false);
@@ -109,7 +109,7 @@ public class Principal extends JDialog implements ActionListener {
 		}
 	}
 
-	private void configurarConversor(int index) {
+	private void configurarTipoConversor(int index) {
 		switch (index) {
 		case 0:
 			actualizarInterface("Conversión de monedas", "Elija la moneda a la que desea convertir su dinero:",
@@ -126,13 +126,6 @@ public class Principal extends JDialog implements ActionListener {
 		default:
 			break;
 		}
-	}
-
-	private void actualizarInterface(String titulo, String prompt, Utils.Monedas obj, Config.Operaciones operacion) {
-		setTitle(titulo);
-		lblPrompt.setText(prompt);
-		cmbOpciones.setModel(new DefaultComboBoxModel<String>(obj.getOpcionesConversion()));
-		tipoOperacion = operacion;
 	}
 
 	private void procesarConversion(int index, Utils.Monedas obj) {
@@ -174,21 +167,30 @@ public class Principal extends JDialog implements ActionListener {
 	}
 
 	private void mostrarError() {
-		JOptionPane.showMessageDialog(this, "El valor ingresado debe ser numérico", "Error", JOptionPane.ERROR_MESSAGE);
+		JOptionPane.showMessageDialog(this, "El valor ingresado es inválido", "Error", JOptionPane.ERROR_MESSAGE);
 		finalizar();
 	}
 
 	private void finalizar() {
 		int resultado = JOptionPane.showConfirmDialog(this, "Desea continuar", "Elija una opción",
-				JOptionPane.YES_NO_OPTION);
+				JOptionPane.YES_NO_CANCEL_OPTION);
 		if (resultado == 0) {
-			this.setVisible(true);
-			setTitle("Menú Principal");
-			lblPrompt.setText("Seleccione una opción de conversión:");
-			cmbOpciones.setModel(new DefaultComboBoxModel<String>(Utils.Config.opcionesConversion));
-			tipoOperacion = Config.Operaciones.CONFIG_CONVERSOR;
+			actualizarInterface("Menú Principal", "Seleccione una opción de conversión:", null,
+					Config.Operaciones.CONFIG_CONVERSOR);
 		} else {
 			this.dispose();
+		}
+	}
+
+	private void actualizarInterface(String titulo, String prompt, Utils.Monedas obj, Config.Operaciones operacion) {
+		this.setVisible(true);
+		setTitle(titulo);
+		lblPrompt.setText(prompt);
+		tipoOperacion = operacion;
+		if (obj == null) {
+			cmbOpciones.setModel(new DefaultComboBoxModel<String>(Utils.Config.opcionesConversion));
+		} else {
+			cmbOpciones.setModel(new DefaultComboBoxModel<String>(obj.getOpcionesConversion()));
 		}
 	}
 }
