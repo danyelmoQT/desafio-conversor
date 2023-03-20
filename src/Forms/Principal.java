@@ -1,4 +1,4 @@
-package Forms;
+package forms;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
@@ -9,13 +9,15 @@ import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
+import utils.Config;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.text.ParseException;
 import java.util.Locale;
-import Utils.Config;
+
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JComboBox;
@@ -33,7 +35,7 @@ public class Principal extends JDialog implements ActionListener {
 	private Config.Operaciones tipoOperacion = Config.Operaciones.CONFIG_CONVERSOR;
 
 	public Principal(String titulo, String propmpt, String[] opciones) {
-		setIconImage(Toolkit.getDefaultToolkit().getImage("C:\\Users\\danie\\Desktop\\icon.png"));
+		setIconImage(Toolkit.getDefaultToolkit().getImage(Principal.class.getResource("/images/icon.png")));
 		setTitle(titulo);
 		setBounds(100, 100, 410, 135);
 		// Layout del dialogo
@@ -94,13 +96,13 @@ public class Principal extends JDialog implements ActionListener {
 				this.setVisible(false);
 				switch (tipoOperacion) {
 				case MODO_CONV_MONEDA:
-					procesarConversion(cmbOpciones.getSelectedIndex(), new Utils.Monedas());
+					procesarConversion(cmbOpciones.getSelectedIndex(), new utils.Monedas());
 					break;
 				case MODO_CONV_TEMP:
-					procesarConversion(cmbOpciones.getSelectedIndex(), new Utils.Temperaturas());
+					procesarConversion(cmbOpciones.getSelectedIndex(), new utils.Temperaturas());
 					break;
 				case MODO_CONV_PRESION:
-					procesarConversion(cmbOpciones.getSelectedIndex(), new Utils.Presiones());
+					procesarConversion(cmbOpciones.getSelectedIndex(), new utils.Presiones());
 					break;
 				default:
 					break;
@@ -113,22 +115,22 @@ public class Principal extends JDialog implements ActionListener {
 		switch (index) {
 		case 0:
 			actualizarInterface("Conversión de monedas", "Elija la moneda a la que desea convertir su dinero:",
-					new Utils.Monedas(), Config.Operaciones.MODO_CONV_MONEDA);
+					new utils.Monedas(), Config.Operaciones.MODO_CONV_MONEDA);
 			break;
 		case 1:
 			actualizarInterface("Conversión de temperaturas", "Elija entre que unidades desea convertir:",
-					new Utils.Temperaturas(), Config.Operaciones.MODO_CONV_TEMP);
+					new utils.Temperaturas(), Config.Operaciones.MODO_CONV_TEMP);
 			break;
 		case 2:
 			actualizarInterface("Conversión de presiones", "Elija entre que unidades deseas convertir:",
-					new Utils.Presiones(), Config.Operaciones.MODO_CONV_PRESION);
+					new utils.Presiones(), Config.Operaciones.MODO_CONV_PRESION);
 			break;
 		default:
 			break;
 		}
 	}
 
-	private void procesarConversion(int index, Utils.Monedas obj) {
+	private void procesarConversion(int index, utils.Monedas obj) {
 		// Utils.Monedas obj = new Utils.Monedas();
 		String origen = obj.getUnidadOrigen(index);
 		String destino = obj.getUnidadDestino(index);
@@ -182,13 +184,13 @@ public class Principal extends JDialog implements ActionListener {
 		}
 	}
 
-	private void actualizarInterface(String titulo, String prompt, Utils.Monedas obj, Config.Operaciones operacion) {
+	private void actualizarInterface(String titulo, String prompt, utils.Monedas obj, Config.Operaciones operacion) {
 		this.setVisible(true);
 		setTitle(titulo);
 		lblPrompt.setText(prompt);
 		tipoOperacion = operacion;
 		if (obj == null) {
-			cmbOpciones.setModel(new DefaultComboBoxModel<String>(Utils.Config.opcionesConversion));
+			cmbOpciones.setModel(new DefaultComboBoxModel<String>(utils.Config.opcionesConversion));
 		} else {
 			cmbOpciones.setModel(new DefaultComboBoxModel<String>(obj.getOpcionesConversion()));
 		}

@@ -1,15 +1,15 @@
-package Start;
+package start;
 
 import javax.swing.JDialog;
 
-import Forms.Principal;
+import forms.Principal;
 
 public class DesafioAlura {
 	
 
 	public static void main(String[] args) {
 		try {
-			Principal dialog = new Principal("Menú Principal","Seleccione una opción de conversión:",Utils.Config.opcionesConversion);
+			Principal dialog = new Principal("Menú Principal","Seleccione una opción de conversión:",utils.Config.opcionesConversion);
 			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 			dialog.setVisible(true);
 		} catch (Exception e) {
